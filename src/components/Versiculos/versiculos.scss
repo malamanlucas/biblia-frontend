@@ -1,0 +1,27 @@
+li {
+  .texto {
+    color: red;
+    cursor: pointer;
+    &:hover {
+      font-weight: bolder;
+    }
+  }
+}
+
+ul.list-group {
+  list-style: decimal inside;
+  margin-bottom: 80px;
+  &.lista_limpa {
+    opacity: 0.3;
+  }
+  .list-group-item {
+    display: list-item;
+    .versiculo {
+      display: inline;
+    }
+  }
+}
+
+.texto {
+  text-decoration: underline;
+}
