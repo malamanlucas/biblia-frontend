@@ -1,4 +1,4 @@
-<template lang="html">
+$<template lang="html">
   <div class="" :style="{'margin-top': marginTop}">
     <ul class="list-group">
       <li class="list-group-item" v-for="v in versiculos">
@@ -11,6 +11,8 @@
         <div :json="v.key.json" class="versiculo" v-text="v.texto"></div>
       </li>
     </ul>
+
+    <detalhe-expressao-dialog ref="detalheExpressaoDialog" />
   </div>
 </template>
 
@@ -19,24 +21,29 @@
   import '@/js/selection.js'
   import '@/js/selectionVersiculo.js'
   import $ from 'jquery'
+  import DetalheExpressaoDialog from './DetalheExpressaoDialog'
 
   export default {
+    name: 'versiculos',
     props: ['marginTop'],
+    data: () => ({
+      versiculos: null
+    }),
     computed: {
       ...mapGetters([
         'getCapitulo'
       ])
     },
+    components: {
+      DetalheExpressaoDialog
+    },
     watch: {
-      getCapitulo (newValue) {
+      getCapitulo(newValue) {
         this.getVersiculos(newValue)
       }
     },
-    data: () => ({
-      versiculos: null
-    }),
     methods: {
-      getVersiculos (capitulo) {
+      getVersiculos(capitulo) {
         this.$http.get('/api/versiculos/', {
           params: {
             livroId: capitulo.key.livroId,
@@ -45,38 +52,40 @@
         }).then(response => {
           this.$nextTick(() => {
             this.versiculos = response.data
-            this.bindVersiculoSelect(this)
+            this.$nextTick(() => {
+              this.bindVersiculoSelect(this)
+            })
             window.scrollTo(0, 0)
           })
         }).catch(e => {
           window.console.log(e)
         })
       },
-      bindVersiculoSelect (_this) {
+      bindVersiculoSelect(_this) {
         $('.list-group').css('position', 'absolute')
 
-        $('.lista_limpa .versiculo').off('mouseup').on('mouseup', function () {
-          var expressao = $(this).textSelected()
-          var keyAsJson = $(this).attr('json')
+        $('.lista_limpa .versiculo').off('mouseup').on('mouseup', event => {
+          let expressao = $(event.currentTarget).textSelected()
 
           if (expressao !== undefined && expressao !== null && expressao.text !== '') {
-            // console.log( expressao.text + ' - ' + keyAsJson )
+            let keyAsJson = $(event.currentTarget).attr('json')
+
             console.log(`${expressao.text} - ${keyAsJson}`)
-            // _this.expressaoSelecionada = expressao;
 
-            // window.jQuery('#myModal').off('show.bs.modal').on('show.bs.modal', e => {
-              // _this.carregarDadosModal(_this, JSON.parse(keyAsJson))
-            // })
-
-            // window.jQuery('#myModal').modal('show')
+            this.$refs.detalheExpressaoDialog.abrirModal({
+              expressao,
+              searchParam: {
+                versiculoKey: JSON.parse(keyAsJson),
+                inicio: expressao.start,
+                fim: expressao.end
+              }
+            })
           }
         })
       }
     },
-    mounted () {
+    mounted() {
       this.getVersiculos(this.getCapitulo)
-    },
-    updated () {
     }
   }
 </script>

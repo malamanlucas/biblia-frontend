@@ -13,3 +13,7 @@ const TESTAMENTO = {
 export default {
   TESTAMENTO
 }
+
+export {
+  TESTAMENTO
+}

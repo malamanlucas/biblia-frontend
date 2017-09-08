@@ -25,7 +25,10 @@
 
 <script>
   import Capitulos from '../Capitulos'
-  import params from '@/params'
+  import { TESTAMENTO } from '@/params'
+  import { mapMutations, mapActions } from 'vuex'
+  import { SET_LIVRO } from '@/store/mutation-types'
+  import livroService from '@/services/livro'
 
   export default {
     data: () => ({
@@ -36,7 +39,7 @@
       Capitulos
     },
     methods: {
-      buildColumnText (c) {
+      buildColumnText(c) {
         let totalExtraSpaces = 3 - c.toString().length
 
         let extraSpaces = ''
@@ -47,31 +50,28 @@
 
         return `${extraSpaces}${c}`
       },
-      populateTestamento (testamento) {
-        return this.$http.get('/api/livros/', {
-          params: {
-            'testamento': testamento.value
-          }
-        }).then(response => {
-          this.testamentos.push({
-            nome: testamento.label,
-            livros: response.data
-          })
-
-          return Promise.resolve(response)
-        })
-      },
-      getCapitulos (livro) {
-        this.$store.commit('setLivro', livro)
+      getCapitulos(livro) {
+        this.setLivro(livro)
         this.$router.push('/livros/capitulos')
+      },
+      ...mapActions(['setLivro']),
+      async loadTestamentos() {
+        this.$refs.loading.show()
+
+        const getTestamento = async testamento => {
+          return {
+            nome: testamento.label,
+            livros: (await livroService.getLivroByTestamento(testamento.value)).data
+          }
+        }
+
+        this.testamentos.push(await getTestamento(TESTAMENTO.NOVO))
+        this.testamentos.push(await getTestamento(TESTAMENTO.VELHO))
+        this.$refs.loading.hide()
       }
     },
-    mounted () {
-      this.$refs.loading.show()
-      Promise.all(Object.values(params.TESTAMENTO).map(this.populateTestamento))
-        .then(() => {
-          this.$refs.loading.hide()
-        })
+    mounted() {
+      this.loadTestamentos()
     }
   }
 </script>

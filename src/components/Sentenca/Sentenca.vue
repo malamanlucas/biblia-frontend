@@ -54,11 +54,11 @@
       copyButton: null
     }),
     methods: {
-      forceClickParent (event) {
+      forceClickParent(event) {
         $(event.srcElement).parents('li').click()
         event.stopPropagation()
       },
-      selectItem (item, index) {
+      selectItem(item, index) {
         this.textsToCopy[index] = this.textsToCopy[index] === 0 ? item : 0
 
         if (this.textsToCopy[index] !== 0) {
@@ -69,7 +69,7 @@
 
         this.copyValues(this.textsToCopy.filter(i => i !== 0))
       },
-      copyValues (values) {
+      copyValues(values) {
         if (values.length) {
           this.valuesSelected = values.join('\n')
         } else {
@@ -77,7 +77,7 @@
         }
         $('#copy-button').click()
       },
-      buscar () {
+      buscar() {
         this.sentencas = null
         this.$validator.validateAll()
           .then(isValid => {
@@ -85,7 +85,7 @@
               this.$refs.loading.show()
               this.$http.get('/api/sentencas/format', {
                 params: {
-                  'termo': this.termo
+                  termo: this.termo
                 }
               }).then(response => {
                 this.sentencas = response.data
@@ -96,7 +96,7 @@
           })
       }
     },
-    mounted () {
+    mounted() {
       if (this.copyButton) {
         this.copyButton.destroy()
       }
@@ -104,7 +104,7 @@
         text: () => this.valuesSelected
       })
     },
-    destroyed () {
+    destroyed() {
       this.copyButton.destroy()
     }
   }

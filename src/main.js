@@ -8,7 +8,9 @@ import VeeValidate from 'vee-validate'
 import Vuex from 'vuex'
 
 import 'jquery'
+
 import 'bootstrap-sass/assets/javascripts/bootstrap'
+import 'datatables.net'
 
 Vue.config.productionTip = false
 
@@ -21,20 +23,7 @@ Vue.use(VeeValidate, {
   errorBagName: 'validation'
 })
 
-const store = new Vuex.Store({
-  state: {
-    livro: null,
-    capitulo: null
-  },
-  mutations: {
-    setLivro: (state, payload) => { state.livro = payload },
-    setCapitulo: (state, payload) => { state.capitulo = payload }
-  },
-  getters: {
-    getLivro: state => state.livro,
-    getCapitulo: state => state.capitulo
-  }
-})
+import store from './store'
 
 import './core'
 
