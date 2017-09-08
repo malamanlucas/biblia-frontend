@@ -32,10 +32,10 @@
       active: false
     }),
     methods: {
-      show () {
+      show() {
         this.active = true
       },
-      hide () {
+      hide() {
         this.active = false
       }
     }

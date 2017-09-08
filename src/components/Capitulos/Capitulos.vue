@@ -21,58 +21,33 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
+  import { SET_CAPITULO } from '@/store/mutation-types'
 
   export default {
-    props: {
-      livroId: {
-        type: Number,
-        default: () => null
-      }
-    },
-    watch: {
-      livroId (value) {
-        if (value) {
-          this.getCapitulos(value)
-        }
-      },
-      getLivro (newLivro) {
-        this.getCapitulos(newLivro.id)
-      }
-    },
     data: () => ({
-      capitulos: [],
       marginTop: '0px'
     }),
-    methods: {
-      getCapitulos (livroId) {
-        this.$refs.loading.show()
-        this.$http.get('/api/capitulos/', {
-          params: {
-            livroId: livroId
-          }
-        }).then(response => {
-          this.$nextTick(() => {
-            this.capitulos = response.data
-          })
-          this.$refs.loading.hide()
-        })
-      },
-      goVersiculos (capitulo) {
-        this.$store.commit('setCapitulo', capitulo)
-        this.$router.push('/livros/capitulos/versiculos')
-      }
-    },
     computed: {
-      ...mapGetters([
-        'getLivro'
-      ])
+      ...mapGetters({
+        capitulos: 'getCapitulos'
+      }),
     },
-    mounted () {
-      this.getCapitulos(this.getLivro.id)
+    methods: {
+      goVersiculos(capitulo) {
+        this.setCapitulo(capitulo)
+        this.$router.push('/livros/capitulos/versiculos')
+      },
+      ...mapMutations({
+        setCapitulo: SET_CAPITULO
+      }),
     },
-    updated () {
-      this.marginTop = getComputedStyle(document.getElementById('capitulos')).height
+    updated() {
+      const elem = document.getElementById('capitulos')
+
+      if (elem) {
+        this.marginTop = getComputedStyle(document.getElementById('capitulos')).height
+      }
     }
   }
 </script>
