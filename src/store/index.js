@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import * as actions from './actions'
 import * as getters from './getters'
 import biblia from './modules/biblia'
+import enums from './modules/enums'
 
 import createPersistedState from 'vuex-persistedstate'
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-    biblia
+    biblia,
+    enums
   },
   strict: debug,
   plugins: [createPersistedState()]
