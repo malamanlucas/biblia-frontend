@@ -31,7 +31,7 @@
     computed: {
       ...mapGetters({
         capitulos: 'getCapitulos'
-      }),
+      })
     },
     methods: {
       goVersiculos(capitulo) {
@@ -40,7 +40,7 @@
       },
       ...mapMutations({
         setCapitulo: SET_CAPITULO
-      }),
+      })
     },
     updated() {
       const elem = document.getElementById('capitulos')

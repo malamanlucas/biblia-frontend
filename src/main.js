@@ -11,6 +11,8 @@ import 'jquery'
 
 import 'bootstrap-sass/assets/javascripts/bootstrap'
 import 'datatables.net'
+import 'font-awesome-sass-loader'
+
 
 Vue.config.productionTip = false
 

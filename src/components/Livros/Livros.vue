@@ -26,8 +26,7 @@
 <script>
   import Capitulos from '../Capitulos'
   import { TESTAMENTO } from '@/params'
-  import { mapMutations, mapActions } from 'vuex'
-  import { SET_LIVRO } from '@/store/mutation-types'
+  import { mapActions } from 'vuex'
   import livroService from '@/services/livro'
 
   export default {
