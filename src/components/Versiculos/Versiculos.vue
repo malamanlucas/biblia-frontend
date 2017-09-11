@@ -1,18 +1,20 @@
-$<template lang="html">
-  <div class="" :style="{'margin-top': marginTop}">
-    <ul class="list-group">
+<template lang="html">
+  <div :style="{'margin-top': marginTop}">
+    <toggle-action-expressao />
+    <ul class="list-group" id="versiculosCustomizados">
       <li class="list-group-item" v-for="v in versiculos">
-        <div :json="v.key.json" v-html="v.versiculoMontado" class="versiculo"></div>
+        <div :json="v.key.json" v-html="v.versiculoMontado" class="lead versiculo"></div>
       </li>
     </ul>
 
-    <ul class="list-group lista_limpa">
+    <ul class="list-group lista_limpa" id="versiculosLimpos">
       <li class="list-group-item" v-for="v in versiculos">
-        <div :json="v.key.json" class="versiculo" v-text="v.texto"></div>
+        <div :json="v.key.json" class="versiculo lead" v-text="v.texto"></div>
       </li>
     </ul>
 
-    <detalhe-expressao-dialog ref="detalheExpressaoDialog" />
+    <detalhe-expressao-dialog ref="detalheExpressaoDialog" @on-save-new-success="refreshVersiculos"
+      @on-modal-close="onModalClose" @on-delete-success="refreshVersiculos" />
   </div>
 </template>
 
@@ -22,12 +24,15 @@ $<template lang="html">
   import '@/js/selectionVersiculo.js'
   import $ from 'jquery'
   import DetalheExpressaoDialog from './DetalheExpressaoDialog'
+  import ToggleActionExpressao from './ToggleActionExpressao'
+  import versiculoService from '@/services/versiculoService'
 
   export default {
     name: 'versiculos',
     props: ['marginTop'],
     data: () => ({
-      versiculos: null
+      versiculos: null,
+      scrollY: 0
     }),
     computed: {
       ...mapGetters([
@@ -35,7 +40,8 @@ $<template lang="html">
       ])
     },
     components: {
-      DetalheExpressaoDialog
+      DetalheExpressaoDialog,
+      ToggleActionExpressao
     },
     watch: {
       getCapitulo(newValue) {
@@ -43,23 +49,25 @@ $<template lang="html">
       }
     },
     methods: {
-      getVersiculos(capitulo) {
-        this.$http.get('/api/versiculos/', {
-          params: {
-            livroId: capitulo.key.livroId,
-            capituloId: capitulo.key.id
-          }
-        }).then(response => {
-          this.$nextTick(() => {
-            this.versiculos = response.data
+      onModalClose() {
+        window.scrollTo(0, this.scrollY)
+      },
+      refreshVersiculos() {
+        this.getVersiculos(this.getCapitulo)
+      },
+      getVersiculos(capitulo, callbackPostLoad) {
+        versiculoService.search(capitulo)
+          .then(response => {
             this.$nextTick(() => {
-              this.bindVersiculoSelect(this)
+              this.versiculos = response.data
+              this.$nextTick(() => {
+                this.bindVersiculoSelect(this)
+              })
+              window.scrollTo(0, 0)
             })
-            window.scrollTo(0, 0)
+          }).catch(e => {
+            window.console.log(e)
           })
-        }).catch(e => {
-          window.console.log(e)
-        })
       },
       bindVersiculoSelect(_this) {
         $('.list-group').css('position', 'absolute')
@@ -71,6 +79,8 @@ $<template lang="html">
             let keyAsJson = $(event.currentTarget).attr('json')
 
             console.log(`${expressao.text} - ${keyAsJson}`)
+
+            this.scrollY = window.scrollY
 
             this.$refs.detalheExpressaoDialog.abrirModal({
               expressao,

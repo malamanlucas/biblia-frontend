@@ -9,7 +9,7 @@
           <div class="h4 testamento__title text-danger" v-text="testamento.nome"></div>
           <div class="testamento__livro " v-for="livro in testamento.livros">
             <div class="testamento__livro__nome text-danger" @click="getCapitulos(livro)">
-              {{ livro.nome }}
+              <h5>{{ livro.nome }}</h5>
             </div>
           </div>
         </div>
@@ -50,10 +50,11 @@
         return `${extraSpaces}${c}`
       },
       getCapitulos(livro) {
+        this.reset()
         this.setLivro(livro)
         this.$router.push('/livros/capitulos')
       },
-      ...mapActions(['setLivro']),
+      ...mapActions(['setLivro', 'reset']),
       async loadTestamentos() {
         this.$refs.loading.show()
 

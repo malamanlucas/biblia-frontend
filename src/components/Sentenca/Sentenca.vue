@@ -46,6 +46,7 @@
   import $ from 'jquery'
 
   export default {
+    inject: ['$validator'],
     data: () => ({
       sentencas: null,
       termo: '',

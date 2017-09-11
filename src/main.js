@@ -10,7 +10,6 @@ import Vuex from 'vuex'
 import 'jquery'
 
 import 'bootstrap-sass/assets/javascripts/bootstrap'
-import 'datatables.net'
 import 'font-awesome-sass-loader'
 
 
@@ -22,7 +21,8 @@ Axios.defaults.baseURL = 'http://localhost:9090'
 
 Vue.use(Vuex)
 Vue.use(VeeValidate, {
-  errorBagName: 'validation'
+  errorBagName: 'validation',
+  inject: false
 })
 
 import store from './store'

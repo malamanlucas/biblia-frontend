@@ -1,5 +1,5 @@
 <template lang="html">
-  <modal>
+  <modal :callBackOnModalClose="callBackOnModalClose">
 
     <span slot="header">{{ title }}</span>
 
@@ -7,31 +7,40 @@
 
       <bootstrap-responsive />
 
-      <form>
+      <form class="form-horizontal" :data-vv-scope="SCOPE_NAME" @submit.prevent>
         <div class="form-group row">
           <label for="exampleTextarea" class="col-form-label col-sm-6 col-xs-10">Descrição</label>
-          <textarea v-model="expressaoObject.descricao" class="col-sm-20 col-xs-16" id="exampleTextarea" rows="3"></textarea>
+          <textarea v-model="expressaoObject.descricao" name="descricao" class="col-sm-20 col-xs-16"
+            id="exampleTextarea" rows="3" v-validate.initial="'required'" :data-vv-scope="`${SCOPE_NAME}.descricao`"
+            :class="{'error-field': validation.has('descricao', `${SCOPE_NAME}.descricao`)}"></textarea>
         </div>
 
-        <div class="form-group row">
-          <div class="col-xs-16 col-sm-10">
-            <input type="text" class="form-control" v-model="dicionario.key.id">
+        <div class="form-group">
+          <label for="codigo" class="col-xs-6 col-sm-3 control-label">Código: </label>
+          <div class="col-xs-10 col-sm-10">
+            <input v-validate.initial="'required|numeric'" type="text" id="codigo" name="codigo" class="form-control"
+              v-model="dicionario.key.id" :class="{'error-field': validation.has('codigo', SCOPE_NAME)}" />
           </div>
-          <div class="col-xs-4">
-            <button class="btn btn-primary" type="button" name="button" @click="addDicionario">Adicionar</button>
+          <div>
+            <button class="btn btn-primary" type="button" name="button" @click="addDicionario"
+              :class="{'disabled': validation.any(SCOPE_NAME)}" :id="idButtonAdd">Adicionar</button>
           </div>
         </div>
 
+
         <div class="form-group row">
+          <label for="idioma" class="col-xs-6 col-sm-3 control-label">Idioma: </label>
           <div class="col-xs-10">
-            <select class="form-control" v-model="dicionario.key.idioma">
+            <select id="idioma" class="form-control" v-model="dicionario.key.idioma"
+              name="idioma" v-validate.initial="`required|in:${idiomasAllowed}`"
+              :class="{'error-field': validation.has('idioma', SCOPE_NAME)}">
               <option v-for="op in idiomas" :value="op">{{ op }}</option>
             </select>
           </div>
         </div>
       </form>
 
-      <table id="datatable_id" class="table table-responsive table-bordered table-bordered">
+      <table id="datatable_id" class="table table-responsive table-bordered table-condensed table-hover">
         <thead>
           <tr>
             <td>CÓDIGO</td>
@@ -39,9 +48,33 @@
             <td>AÇÕES</td>
           </tr>
         </thead>
+        <tbody>
+          <template v-if="dicionarios">
+            <tr v-for="d in dicionarios">
+              <td>{{ d.key.id }}</td>
+              <td>{{ d.key.idioma }}</td>
+              <td>
+                <i @click="deleteRow(d)" class="icon-delete fa fa-trash-o"></i>
+              </td>
+            </tr>
+          </template>
+          <tr v-else>
+            <td colspan="3" class="txt-center">Não há expressões</td>
+          </tr>
+        </tbody>
       </table>
 
-      <button class="btn btn-primary" type="button" name="button" @click="save">Salvar</button>
+      <div class="actions">
+
+      </div>
+
+      <button class="btn btn-success btn-lg" type="button" name="button"
+        :class="{'disabled': validation.has('descricao', `${SCOPE_NAME}.descricao`)}"
+        @click="save" :id="idButtonSave">Salvar</button>
+
+      <button class="btn btn-danger btn-lg" type="button" name="button"
+        :class="{'disabled': !canDelete}" :id="idButtonDelete"
+        @click="deleteExpressao">Remover</button>
 
     </div>
 
@@ -50,14 +83,14 @@
 
 <script>
   import modalMixins from '@/core/components/Modal/modal-mixins'
-  import expressaoService from '@/services/expressao'
-  import $ from 'jquery'
+  import expressaoService from '@/services/expressaoService'
   import { mapGetters } from 'vuex'
+  import $ from 'jquery'
 
   export default {
+    inject: ['$validator'],
     mixins: [modalMixins],
     data: () => ({
-      dt: null,
       expressao: null,
       expressaoObject: {
         descricao: ''
@@ -67,12 +100,22 @@
           id: null,
           idioma: ''
         }
-      }
+      },
+      idButtonAdd: 'idButtonAdd',
+      idButtonSave: 'idButtonSave',
+      idButtonDelete: 'idButtonDelete'
     }),
     computed: {
+      canDelete() {
+        return !!(this.expressaoObject && this.expressaoObject.key && this.expressaoObject.key.expressaoId)
+      },
+      SCOPE_NAME() {
+        return 'dicionario-form'
+      },
       ...mapGetters({
         idiomas: 'getIdiomas',
-        livro: 'getLivro'
+        testamento: 'getLivroTestamento',
+        idiomasAllowed: 'getIdiomasAllowed'
       }),
       title() {
         if (this.expressao) {
@@ -80,83 +123,78 @@
         }
 
         return 'Nenhuma expressão selecionada'
+      },
+      dicionarios() {
+        return this.expressaoObject.dicionarios
       }
     },
     methods: {
+      deleteExpressao() {
+        if (!this.isBtnDisabled(this.idButtonDelete)) {
+          expressaoService.delete(this.expressaoObject.key)
+          this.$emit('on-delete-success')
+        }
+      },
+      callBackOnModalClose() {
+        this.$emit('on-modal-close')
+      },
+      deleteRow(dicionario) {
+        this.expressaoObject.dicionarios = this.expressaoObject.dicionarios.filter(d => d.key.id !== dicionario.key.id)
+      },
+      isBtnDisabled(id) {
+        return $(`#${id}`).hasClass('disabled')
+      },
       initDicionario() {
         this.dicionario = {
           key: {
             id: null,
-            idioma: this.livro.testamento.idioma
+            idioma: this.testamento.idioma
           }
         }
       },
-      createTable() {
-        if (!$.fn.DataTable.isDataTable('#datatable_id')) {
-          let options = {
-            paging: false,
-            ordering: false,
-            info: false,
-            dom: 't',
-            language: {
-              emptyTable: 'Nao há expressões'
-            },
-            columns: [
-              {data: 'codigo'},
-              {data: 'idioma'},
-              {
-                data: 'acoes',
-                defaultContent: '<i class="icon-delete fa fa-trash-o"></i>'
-              }
-            ]
-          }
-
-          this.dt = $('#datatable_id').DataTable(options)
-          this.dt.draw()
+      initObject(expressaoParam) {
+        this.expressaoObject = {
+          descricao: '',
+          dicionarios: [],
+          key: {
+            versiculoId: expressaoParam.searchParam.versiculoKey.id,
+            capituloId: expressaoParam.searchParam.versiculoKey.capituloId,
+            livroId: expressaoParam.searchParam.versiculoKey.livroId
+          },
+          inicio: expressaoParam.expressao.start,
+          fim: expressaoParam.expressao.end,
+          texto: expressaoParam.expressao.text
         }
-      },
-      a() {
-        window.alert('testando deleção')
       },
       addDicionario() {
-        this.expressaoObject.dicionarios.push(this.dicionario)
-        this.addTable(this.dicionario)
-        this.refreshTable()
-        this.initDicionario()
-      },
-      save() {
-        expressaoService.save(this.expressaoObject)
-      },
-      async carregarDadosModal(expressaoParam) {
-        this.createTable()
-
-        this.dt.clear()
-
-        try {
-          this.expressaoObject = (await expressaoService.searchExpressaoByTermo(expressaoParam.searchParam)).data
-          this.expressaoObject.dicionarios.forEach(this.addTable)
-        } catch (err) {
-          //
-        } finally {
-          this.refreshTable()
+        if (!this.isBtnDisabled(this.idButtonAdd)) {
+          window.console.log('qweqw')
+          this.expressaoObject.dicionarios.push(this.dicionario)
+          this.initDicionario()
         }
       },
-      refreshTable() {
-        this.dt.draw()
-        $('.icon-delete').off('click').on('click', this.a)
+      save() {
+        if (!this.isBtnDisabled(this.idButtonSave)) {
+          expressaoService.save(this.expressaoObject)
+          if (!this.expressaoObject.key.expressaoId) {
+            this.$emit('on-save-new-success')
+          }
+        }
       },
-      addTable(d) {
-        this.dt.row.add({
-          codigo: d.key.id,
-          idioma: d.key.idioma
-        })
+      async carregarDadosModal(expressaoParam) {
+        try {
+          this.expressaoObject = (await expressaoService.searchExpressaoByTermo(expressaoParam.searchParam)).data
+        } finally {
+          //
+        }
       },
-      prepareModalToShow(expressao) {
-        this.expressao = expressao
+      prepareModalToShow(expressaoParam) {
+        this.expressao = expressaoParam.expressao
+        this.initObject(expressaoParam)
         this.initDicionario()
       },
       abrirModal(expressaoParam) {
-        this.prepareModalToShow(expressaoParam.expressao)
+        this.prepareModalToShow(expressaoParam)
         this.show()
         this.carregarDadosModal(expressaoParam)
       }
@@ -164,8 +202,12 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .icon-delete {
     cursor: pointer;
+  }
+
+  .error-field {
+    border: 2px solid red;
   }
 </style>

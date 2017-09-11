@@ -1,6 +1,5 @@
-
 import { SET_IDIOMAS } from '../mutation-types'
-import enumsService from '@/services/enums'
+import enumsService from '@/services/enumsService'
 
 const state = {
   idiomas: null

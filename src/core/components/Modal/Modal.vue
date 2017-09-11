@@ -18,5 +18,27 @@
   </div><!-- /.modal -->
 </template>
 
+<script>
+  import $ from 'jquery'
+
+  export default {
+    props: ['callBackOnModalClose'],
+    methods: {
+      registerListeners() {
+        $('#myModal').off('hide.bs.modal').on('hide.bs.modal', () => {
+          this.callBackOnModalClose && this.callBackOnModalClose()
+          // this.$emit('on-modal-close')
+        })
+      }
+    },
+    mounted() {
+      this.registerListeners()
+    },
+    updated() {
+      this.registerListeners()
+    }
+  }
+</script>
+
 <style lang="scss" scoped>
 </style>
