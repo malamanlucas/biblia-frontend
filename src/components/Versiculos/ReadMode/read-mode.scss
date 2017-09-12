@@ -1,0 +1,26 @@
+.read-mode {
+  li {
+    .texto {
+      color: red;
+      cursor: pointer;
+      &:hover {
+        font-weight: bold;
+      }
+    }
+  }
+
+  ul.list-group {
+    list-style: decimal inside;
+    margin-bottom: 80px;
+    .list-group-item {
+      display: list-item;
+      .versiculo {
+        display: inline;
+      }
+    }
+  }
+
+  .texto {
+    text-decoration: underline;
+  }
+}

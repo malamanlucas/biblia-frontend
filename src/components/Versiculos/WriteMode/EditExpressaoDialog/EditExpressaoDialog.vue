@@ -5,7 +5,7 @@
 
     <div class="container-fluid">
 
-      <bootstrap-responsive />
+      <!-- <bootstrap-responsive /> -->
 
       <form class="form-horizontal" :data-vv-scope="SCOPE_NAME" @submit.prevent>
         <div class="form-group row">

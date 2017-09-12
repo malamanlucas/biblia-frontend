@@ -1,6 +1,7 @@
 import { SET_CAPITULO, SET_LIVRO,
          SET_CAPITULOS, SET_TOGGLE_EXPRESSAO } from '../mutation-types'
 import capituloService from '@/services/capitulo'
+import { OPERATION_EXPRESSAO } from '@/enums'
 
 const state = {
   livro: null,
@@ -46,7 +47,8 @@ const getters = {
 
     return []
   },
-  toggleExpressao: state => state.toggleExpressao
+  toggleExpressao: state => state.toggleExpressao,
+  hasPermissionToWriteExpressao: state => state.toggleExpressao === OPERATION_EXPRESSAO.WRITE
 }
 
 const actions = {
