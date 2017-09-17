@@ -129,10 +129,11 @@
       }
     },
     methods: {
-      deleteExpressao() {
+      async deleteExpressao() {
         if (!this.isBtnDisabled(this.idButtonDelete)) {
-          expressaoService.delete(this.expressaoObject.key)
+          await expressaoService.delete(this.expressaoObject.key)
           this.$emit('on-delete-success')
+          this.hide()
         }
       },
       callBackOnModalClose() {
@@ -173,9 +174,9 @@
           this.initDicionario()
         }
       },
-      save() {
+      async save() {
         if (!this.isBtnDisabled(this.idButtonSave)) {
-          expressaoService.save(this.expressaoObject)
+          await expressaoService.save(this.expressaoObject)
           if (!this.expressaoObject.key.expressaoId) {
             this.$emit('on-save-new-success')
           }
