@@ -16,8 +16,8 @@ import 'font-awesome-sass-loader'
 Vue.config.productionTip = false
 
 Vue.prototype.$http = Axios
-// Axios.defaults.baseURL = 'http://162.243.173.63:9090'
-Axios.defaults.baseURL = 'http://localhost:9090'
+Axios.defaults.baseURL = 'http://45.55.185.184:9090'
+// Axios.defaults.baseURL = 'http://localhost:9090'
 
 Vue.use(Vuex)
 Vue.use(VeeValidate, {
