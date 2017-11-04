@@ -1,4 +1,4 @@
-// http://eslint.org/docs/user-guide/configuring
+// https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
   root: true,
@@ -15,32 +15,18 @@ module.exports = {
   plugins: [
     'html'
   ],
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "destructuring": true,
-    "classes": true,
-    "defaultParams": true,
-    "blockBindings": true,
-    "modules": true,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "restParams": true,
-    "spread": true,
-    "forOf": true,
-    "generators": true,
-    "templateStrings": true,
-    "superInFunctions": true,
-    "experimentalObjectRestSpread": true
-  },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "mocha": true
   },
   "globals": {
     "arguments": true,
     "window": true,
-    "Promise": true
+    "Promise": true,
+    expect: true,
+    assert: true,
+    sinon: true
   },
   "root": true,
   "parserOptions": {
@@ -78,7 +64,7 @@ module.exports = {
     "max-nested-callbacks": [1, 4],
     "new-cap": 1,
     "new-parens": 1,
-    "newline-after-var": [2, "always"],
+    "newline-after-var": [0, "always"],
     "no-array-constructor": 2,
     "no-class-assign": 2,
     "no-cond-assign": 2,
@@ -142,7 +128,11 @@ module.exports = {
     }],
     "keyword-spacing": 2,
     "space-before-blocks": 2,
-    "space-before-function-paren": [2, "never"],
+    "space-before-function-paren": [2, {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
     "space-infix-ops": 2,
     "space-unary-ops": 2,
     "strict": 0,

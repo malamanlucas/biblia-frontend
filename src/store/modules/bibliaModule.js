@@ -1,5 +1,5 @@
 import { SET_CAPITULO, SET_LIVRO,
-         SET_CAPITULOS, SET_TOGGLE_EXPRESSAO } from '../mutation-types'
+  SET_CAPITULOS, SET_TOGGLE_EXPRESSAO } from '../mutation-types'
 import capituloService from '@/services/capitulo'
 import { OPERATION_EXPRESSAO } from '@/enums'
 

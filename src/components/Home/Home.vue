@@ -26,33 +26,22 @@
       </nav>
     </footer>
 
-    <router-view name="home"></router-view>
+    <router-view :name="SLOT_HOME"></router-view>
 
   </div>
 </template>
 
 <script>
-export default {
-}
+  import {SLOT_HOME} from '@/slots'
+
+  export default {
+    name: 'home',
+    computed: {
+      SLOT_HOME: () => SLOT_HOME
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
-.body {
-}
-
-footer .navbar-collapse.in {
-  bottom: 50px;
-  position: absolute;
-  background-color:#333;
-  width: 100%;
-}
-
-@media screen and (max-width: 768px) {
-  footer .navbar-collapse {
-    position: absolute;
-    bottom: 50px;
-    width: 100%;
-    background-color: #303030;
-  }
-}
+  @import './home';
 </style>

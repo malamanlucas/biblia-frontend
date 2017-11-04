@@ -12,6 +12,9 @@ import 'jquery'
 import 'bootstrap-sass/assets/javascripts/bootstrap'
 import 'font-awesome-sass-loader'
 
+import store from './store'
+
+import './core'
 
 Vue.config.productionTip = false
 
@@ -19,15 +22,12 @@ Vue.prototype.$http = Axios
 Axios.defaults.baseURL = 'http://45.55.185.184:9090'
 // Axios.defaults.baseURL = 'http://localhost:9090'
 
-Vue.use(Vuex)
+// Vue.use(Vuex)
 Vue.use(VeeValidate, {
   errorBagName: 'validation',
   inject: false
 })
 
-import store from './store'
-
-import './core'
 
 /* eslint-disable no-new */
 new Vue({
