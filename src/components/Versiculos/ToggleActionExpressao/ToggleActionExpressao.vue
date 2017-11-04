@@ -30,7 +30,7 @@
     },
     methods: {
       ...mapMutations({
-        setToggleExpressao: [SET_TOGGLE_EXPRESSAO]
+        setToggleExpressao: SET_TOGGLE_EXPRESSAO
       }),
       registerListenerOnRadio() {
         $(':radio[name="toggleExpressao"]').off('change').on('change', event => {

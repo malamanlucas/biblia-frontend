@@ -14,7 +14,7 @@
     methods: {
       ...mapActions(['loadEnums']),
       ...mapMutations({
-        setToggleExpressao: [SET_TOGGLE_EXPRESSAO]
+        setToggleExpressao: SET_TOGGLE_EXPRESSAO
       })
     },
     created() {
