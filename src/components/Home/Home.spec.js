@@ -1,14 +1,31 @@
-// import { mount } from 'avoriaz'
-import { shallow } from 'vue-test-utils'
-import Home from '@/components/Home'
+import { shallow, createLocalVue } from 'vue-test-utils'
+import HomeComponent from '@/components/Home'
 import { HOME } from '@/paths'
+import router from '@/router'
+
+let wrapper
 
 describe('Home.vue', () => {
-  it(`should has name: 'home'`, () => expect(shallow(Home).name()).to.equals('home'))
+  beforeEach(() => {
+    const localVue = createLocalVue()
+    wrapper = shallow(HomeComponent, {
+      attachToDocument: true,
+      localVue,
+      router
+    })
+  })
+
+  afterEach(() => wrapper.destroy())
+
+  const homeName = 'home'
+  it(`should has name: ${homeName}`, () => expect(wrapper.name()).to.equals(homeName))
 
   describe('in route:', () => {
-    it(`${HOME.name} should slot `, () => {
-      const wrapper = shallow(Home)
+    it(`When push: ${HOME.path} should name/path be equals ${HOME.name}/${HOME.path}`, () => {
+      console.log(HOME)
+      wrapper.vm.$router.push(HOME)
+      console.log(wrapper.vm.$route)
+      // const wrapper = shallow(Home)
       // expect(wrapper.name()).to.equals('home')
     })
   })

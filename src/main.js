@@ -2,16 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
 import Axios from 'axios'
 import VeeValidate from 'vee-validate'
-import Vuex from 'vuex'
 
 import 'jquery'
 
 import 'bootstrap-sass/assets/javascripts/bootstrap'
 import 'font-awesome-sass-loader'
 
+import router from './router'
 import store from './store'
 
 import './core'
@@ -22,12 +21,10 @@ Vue.prototype.$http = Axios
 Axios.defaults.baseURL = 'http://45.55.185.184:9090'
 // Axios.defaults.baseURL = 'http://localhost:9090'
 
-// Vue.use(Vuex)
 Vue.use(VeeValidate, {
   errorBagName: 'validation',
   inject: false
 })
-
 
 /* eslint-disable no-new */
 new Vue({

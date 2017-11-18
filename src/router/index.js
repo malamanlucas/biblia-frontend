@@ -6,30 +6,36 @@ import Sentenca from '@/components/Sentenca'
 import Capitulos from '@/components/Capitulos'
 import Versiculos from '@/components/Versiculos'
 
+import { ROUTER_VIEW_HOME } from '@/router-view-names'
+import { HOME, CAPITULOS, VERSICULOS, LIVROS, SENTENCA } from '@/paths'
+
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'Home',
+      path: HOME.path,
+      name: HOME.name,
       component: Home,
       children: [
         {
-          path: 'livros',
+          path: LIVROS.path,
+          name: LIVROS.name,
           components: {
-            home: Livros
+            [ROUTER_VIEW_HOME]: Livros
           },
           children: [
             {
-              path: 'capitulos',
+              path: CAPITULOS.path,
+              name: CAPITULOS.name,
               components: {
                 capitulos: Capitulos
               },
               children: [
                 {
-                  path: 'versiculos',
+                  path: VERSICULOS.path,
+                  name: VERSICULOS.name,
                   components: {
                     versiculos: Versiculos
                   }
@@ -39,8 +45,8 @@ export default new Router({
           ]
         },
         {
-          path: '/sentenca',
-          name: 'sentenca',
+          path: SENTENCA.path,
+          name: SENTENCA.name,
           components: {
             home: Sentenca
           }

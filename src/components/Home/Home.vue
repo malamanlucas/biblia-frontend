@@ -26,18 +26,18 @@
       </nav>
     </footer>
 
-    <router-view :name="SLOT_HOME"></router-view>
+    <router-view :name="ROUTER_VIEW_HOME"></router-view>
 
   </div>
 </template>
 
 <script>
-  import {SLOT_HOME} from '@/slots'
+  import { ROUTER_VIEW_HOME } from '@/router-view-names'
 
   export default {
     name: 'home',
     computed: {
-      SLOT_HOME: () => SLOT_HOME
+      ROUTER_VIEW_HOME: () => ROUTER_VIEW_HOME
     }
   }
 </script>

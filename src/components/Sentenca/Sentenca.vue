@@ -7,7 +7,7 @@
       <div class="col-xs-26">
         <div class="input-group">
 
-          <input type="text" @keyup.enter="buscar" v-validate="'required|min:3'" name="termo"
+          <input type="text" @keyup.enter="buscar" v-validate="'required|min:2'" name="termo"
             class="form-control" :class="{'hasError': validation.has('termo')}"  placeholder="Exemplo: sodoma" v-model="termo" />
 
           <span class="input-group-btn">
