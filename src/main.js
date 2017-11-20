@@ -18,8 +18,9 @@ import './core'
 Vue.config.productionTip = false
 
 Vue.prototype.$http = Axios
-Axios.defaults.baseURL = 'http://45.55.185.184:9090'
+// Axios.defaults.baseURL = 'http://45.55.185.184:9090'
 // Axios.defaults.baseURL = 'http://localhost:9090'
+Axios.defaults.baseURL = 'https://www.italki.com/api'
 
 Vue.use(VeeValidate, {
   errorBagName: 'validation',
