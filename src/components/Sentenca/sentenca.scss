@@ -5,6 +5,7 @@
 }
 
 .list {
+  font-size: 1.5em;
   &__title {
     margin: 7px 0px;
     font-weight: bold;
@@ -23,6 +24,12 @@
       &__checkbox {
         margin-right: 0.5em;
         display: none;
+      }
+      /deep/ &__text {
+        &__highlight {
+          text-decoration: underline;
+          color: #2744e4;
+        }
       }
     }
     &--checked {

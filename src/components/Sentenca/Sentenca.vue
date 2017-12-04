@@ -31,7 +31,7 @@
               <div class="list__item__content__checkbox">
                 <input type="checkbox" :id="`checkbox${index}`" >
               </div>
-              <div>{{ item }}</div>
+              <div class="list__item__content__text" v-html="highlight(item)" />
             </div>
           </li>
         </ul>
@@ -44,6 +44,7 @@
 <script>
   import Clipboard from 'clipboard'
   import $ from 'jquery'
+  import { isEmpty } from 'lodash'
 
   export default {
     inject: ['$validator'],
@@ -55,6 +56,13 @@
       copyButton: null
     }),
     methods: {
+      highlight(item) {
+        if (isEmpty(this.termo)) {
+          return item
+        }
+        let regex = new RegExp(`(${this.termo})`, 'gi')
+        return item.replace(regex, '<span class="list__item__content__text__highlight">$1</span>')
+      },
       forceClickParent(event) {
         $(event.srcElement).parents('li').click()
         event.stopPropagation()
