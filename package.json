@@ -22,6 +22,7 @@
     "font-awesome": "4.7.0",
     "font-awesome-sass-loader": "2.0.1",
     "jquery": "3.2.1",
+    "lodash": "^4.17.4",
     "node-sass": "4.6.0",
     "sass-loader": "6.0.6",
     "vee-validate": "2.0.0-rc.21",
