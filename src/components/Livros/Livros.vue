@@ -8,7 +8,8 @@
         <div class="testamento bg-info text-center" v-for="testamento in testamentos">
           <div class="h4 testamento__title text-danger" v-text="testamento.nome"></div>
           <div class="testamento__livro " v-for="livro in testamento.livros">
-            <div class="testamento__livro__nome text-danger" @click="getCapitulos(livro)">
+            <div class="testamento__livro__nome text-danger" @click="getCapitulos(livro)"
+              :class="{'testamento__livro__nome--active': isLivroActive(livro.id)}">
               <h5>{{ livro.nome }}</h5>
             </div>
           </div>
@@ -26,7 +27,7 @@
 <script>
   import Capitulos from '../Capitulos'
   import { TESTAMENTO } from '@/params'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   import livroService from '@/services/livro'
 
   export default {
@@ -37,7 +38,13 @@
     components: {
       Capitulos
     },
+    computed: {
+      ...mapGetters(['getLivro'])
+    },
     methods: {
+      isLivroActive(id) {
+        return this.getLivro.id === id
+      },
       buildColumnText(c) {
         let totalExtraSpaces = 3 - c.toString().length
 

@@ -8,7 +8,7 @@
 
       <div class="col-xs-26" id="capitulos">
         <div class="capitulos__capitulo col-xs-1 text-left" v-for="c in capitulos" @click="goVersiculos(c)"
-          :class="{'active': isActive(c.key.id)}">
+          :class="{'capitulos__capitulo--active': isActive(c.key.id)}">
           {{ c.key.id }}
         </div>
       </div>
