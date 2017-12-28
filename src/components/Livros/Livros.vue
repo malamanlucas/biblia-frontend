@@ -29,6 +29,7 @@
   import { TESTAMENTO } from '@/params'
   import { mapActions, mapGetters } from 'vuex'
   import livroService from '@/services/livro'
+  import { isNil } from 'lodash'
 
   export default {
     data: () => ({
@@ -43,7 +44,7 @@
     },
     methods: {
       isLivroActive(id) {
-        return this.getLivro.id === id
+        return !isNil(this.getLivro) && this.getLivro.id === id
       },
       buildColumnText(c) {
         let totalExtraSpaces = 3 - c.toString().length

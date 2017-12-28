@@ -1,5 +1,5 @@
 <template lang="html">
-  <div :style="{'margin-top': marginTop}">
+  <div :style="{'margin-top': marginTop}" v-cloak>
 
     <toggle-action-expressao />
 
