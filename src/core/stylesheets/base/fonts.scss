@@ -6,6 +6,27 @@
 }
 
 @font-face {
+  font-family: 'opensans';
+  src: url("/static/assets/fonts/OpenSans-SemiBold.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'cormorant';
+  src: url("/static/assets/fonts/Cormorant-SemiBold.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'futura';
+  src: url("/static/assets/fonts/Futura Heavy font.ttf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'LeagueGothic';
   src: url("/static/assets/fonts/LeagueGothic-Regular.otf");
   font-weight: normal;
