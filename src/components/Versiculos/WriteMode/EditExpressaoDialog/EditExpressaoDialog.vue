@@ -160,7 +160,8 @@
           key: {
             versiculoId: expressaoParam.searchParam.versiculoKey.id,
             capituloId: expressaoParam.searchParam.versiculoKey.capituloId,
-            livroId: expressaoParam.searchParam.versiculoKey.livroId
+            livroId: expressaoParam.searchParam.versiculoKey.livroId,
+            versaoId: expressaoParam.searchParam.versiculoKey.versaoId
           },
           inicio: expressaoParam.expressao.start,
           fim: expressaoParam.expressao.end,
