@@ -25,8 +25,9 @@
       whenVersiculosLoaded() {
         $('.texto').off('click').on('click', event => {
           let keyAsJson = $(event.currentTarget).parent().attr('json')
+          const dics = $(event.currentTarget).attr('dic')
 
-          this.$refs.viewExpressaoDialog.abrirModal(JSON.parse(keyAsJson))
+          this.$refs.viewExpressaoDialog.abrirModal(JSON.parse(keyAsJson), dics)
         })
       }
     }
