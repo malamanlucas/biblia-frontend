@@ -1,6 +1,7 @@
 import NaoPequesMais from './NaoPequesMais'
 import CeuOuInferno from './CeuOuInferno'
 import JesusSalva from './JesusSalva'
+import Proibicao from './Proibicao'
 
 export default [
   {
@@ -14,5 +15,9 @@ export default [
   {
     path: '/ceuOuInferno',
     component: CeuOuInferno
+  },
+  {
+    path: '/proibicao',
+    component: Proibicao
   }
 ]

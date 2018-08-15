@@ -28,7 +28,10 @@ const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  quiet: true
+  quiet: true,
+  watchOptions: {
+    poll: true
+  }
 })
 
 const hotMiddleware = require('webpack-hot-middleware')(compiler, {
