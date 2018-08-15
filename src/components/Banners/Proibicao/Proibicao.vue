@@ -2,7 +2,7 @@
   <div class="proibicao">
 
     <div class="perigo">
-      PERIGO! CONDUZ AO...
+      Atos ilícitos!
     </div>
 
     <div class="row">
@@ -39,7 +39,7 @@
     </div>
 
     <div class="inferno">
-      INFERNO!!
+      levam ao INFERNO!
     </div>
 
 
