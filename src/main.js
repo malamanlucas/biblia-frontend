@@ -5,11 +5,6 @@ import App from './App'
 import Axios from 'axios'
 import VeeValidate from 'vee-validate'
 
-import 'jquery'
-
-import 'bootstrap-sass/assets/javascripts/bootstrap'
-import 'font-awesome-sass-loader'
-
 import router from './router'
 import store from './store'
 

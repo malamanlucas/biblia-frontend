@@ -1,56 +1,59 @@
-<template lang="html">
-  <div class="sentenca">
+<template>
+  <div class="sentenca container-fluid">
 
     <button type="button" id="copy-button" class="disappear">CopyButton</button>
 
-    <div class="sentenca__header">
-      <div class="row">
-        <div class="col-xs-26 col-sm-18">
-          <div class="input-group">
+    <div class="row">
+      <div class="col-xs-26">
+        <div class="input-group">
 
-            <input type="text" @keyup.enter="buscar" v-validate="'required|min:2'" name="termo"
-            class="form-control" :class="{'hasError': validation.has('termo')}"  placeholder="Exemplo: sodoma" v-model="termo" />
+          <input type="text" @keyup.enter="buscar" v-validate="'required|min:2'" name="termo"
+            class="form-control" :class="{'hasError': validation.has('termo')}"  placeholder="Exemplo: sodoma" v-model="request.termo" />
 
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" @click="buscar">Buscar</button>
-            </span>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" @click="buscar">Buscar</button>
+          </span>
 
-          </div>
         </div>
-        <div class="col-xs-26 col-sm-8 sentenca__header__right" v-if="sentencas">
-          <button type="button" class="col-xs-9 col-sm-13 btn btn-primary" @click="toggleSelectAll">
-            <template v-if="!isAllSelected">
-              Select ALL
-            </template>
-            <template v-else>
-              UnSelect ALL
-            </template>
-          </button>
-          <div class="col-xs-17 col-sm-13 sentenca__header__right__ocorrencias">
-            {{ sentencas.total }} ocorrência(s)
-          </div>
-        </div>
+
       </div>
+    </div>
+    
+    <div class="row">
+      <div class="custom-control custom-switch col-xs-6" @click="buscar">
+        <input type="checkbox" class="custom-control-input" id="ignoreCase" v-model="request.ignoreCase">
+        <label class="custom-control-label" for="ignoreCase">IgnoreCase</label>
+      </div>
+
+      <button type="button" class="btn btn-primary col-xs-6" @click="toggleSelectAll">
+        <template v-if="!isAllSelected">
+          Select ALL
+        </template>
+        <template v-else>
+          UnSelect ALL
+        </template>
+      </button>
     </div>
 
     <loading ref="loading"></loading>
 
-    <template v-if="sentencas">
-      <div class="row sentenca__list">
-        <div class="col-xs-26">
-          <ul class="list-group">
-            <li class="list-group-item sentenca__list__item" v-for="(item, index) in sentencas.textos" @click.self="selectItem(item, index)">
-              <div class="sentenca__list__item__content" @click.stop.prevent="forceClickParent">
-                <div class="sentenca__list__item__content__checkbox">
-                  <input type="checkbox" :id="`checkbox${index}`" >
-                </div>
-                <div class="sentenca__list__item__content__text" v-html="highlight(item)" />
-              </div>
-            </li>
-          </ul>
-        </div>
+    <div class="row list" v-if="sentencas">
+      <div class="col-xs-26 sentenca__list__title text-info h4 text-center">
+        {{ sentencas.total }} ocorrência(s)
       </div>
-    </template>
+      <div class="col-xs-26">
+        <ul class="list-group">
+          <li class="list-group-item sentenca__list__item" v-for="(item, index) in sentencas.textos" @click.self="selectItem(item, index)" :key="index">
+            <div class="sentenca__list__item__content" @click.stop.prevent="forceClickParent">
+              <div class="sentenca__list__item__content__checkbox">
+                <input type="checkbox" :id="`checkbox${index}`" >
+              </div>
+              <div class="sentenca__sentenca__list__item__content__text" v-html="highlight(item)" />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -64,7 +67,10 @@
     inject: ['$validator'],
     data: () => ({
       sentencas: null,
-      termo: '',
+      request: {
+        termo: '',
+        ignoreCase: true
+      },
       textsToCopy: [],
       valuesSelected: '',
       copyButton: null
@@ -76,11 +82,11 @@
     },
     methods: {
       highlight(item) {
-        if (isEmpty(this.termo)) {
+        if (isEmpty(this.request.termo)) {
           return item
         }
-        let regex = new RegExp(`(${this.termo})`, 'gi')
-        return item.replace(regex, '<span class="sentenca__list__item__content__text__highlight">$1</span>')
+        let regex = new RegExp(`(${this.request.termo})`, 'gi')
+        return item.replace(regex, '<u class="text-primary"><b>$1</b></u>')
       },
       forceClickParent(event) {
         $(event.srcElement).parents('li').click()
@@ -123,7 +129,8 @@
               this.$refs.loading.show()
               this.$http.get('/api/sentencas/format', {
                 params: {
-                  termo: this.termo
+                  termo: this.request.termo,
+                  ignoreCase: this.request.ignoreCase
                 }
               }).then(response => {
                 this.sentencas = response.data
